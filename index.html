@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTUITY - Ultimate Grammar Battle</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 2rem 1rem;
+      background: rgba(28, 28, 30, 0.6);
+      border-radius: 1.5rem;
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #C9A961 0%, #E6C88A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+    }
+
+    .header .tagline {
+      color: #8e8e93;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .profile-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(60, 60, 67, 0.6);
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .profile-badge:hover {
+      background: rgba(60, 60, 67, 0.8);
+      border-color: #C9A961;
+    }
+
+    .achievement-icon {
+      font-size: 1.5rem;
+    }
+
+    .xp-display {
+      font-size: 0.9rem;
+      color: #C9A961;
+      font-weight: 700;
+    }
+
+    /* MODE SELECTOR */
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .mode-card {
+      background: rgba(28, 28, 30, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 2px solid rgba(84, 84, 88, 0.4);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #C9A961, #E6C88A);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .mode-card:hover::before {
+      opacity: 1;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201, 169, 97, 0.6);
+      box-shadow: 0 12px 32px rgba(201, 169, 97, 0.3);
+    }
+
+    .mode-card.active {
+      background: rgba(201, 169, 97, 0.15);
+      border-color: #C9A961;
+    }
+
+    .mode-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .mode-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #C9A961;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .mode-desc {
+      font-size: 0.9rem;
+      color: #8e8e93;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .mode-stats {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(84, 84, 88, 0.3);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #C9A961;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #636366;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* GAME SETTINGS */
+    .game-settings {
+      background: rgba(28, 28, 30, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(84, 84, 88, 0.4);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .setting-group {
+      background: rgba(60, 60, 67, 0.3);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(84, 84, 88, 0.3);
+    }
+
+    .setting-label {
+      font-size: 0.85rem;
+      color: #8e8e93;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+
+    .setting-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #C9A961;
+    }
+
+    .slider {
+      width: 100%;
+      margin-top: 0.75rem;
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(84, 84, 88, 0.4);
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #C9A961;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.6);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      accent-color: #C9A961;
+    }
+
+    .difficulty-selector {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .difficulty-btn {
+      flex: 1;
+      padding: 0.5rem;
+      background: rgba(28, 28, 30, 0.6);
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      border-radius: 0.5rem;
+      color: #8e8e93;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .difficulty-btn:hover {
+      border-color: #C9A961;
+    }
+
+    .difficulty-btn.active {
+      background: rgba(201, 169, 97, 0.2);
+      border-color: #C9A961;
+      color: #C9A961;
+    }
+
+    /* SCOREBOARD */
+    .scoreboard {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .player-panel {
+      flex: 1;
+      background: rgba(28, 28, 30, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 2px solid rgba(84, 84, 88, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-panel.active {
+      border-color: #C9A961;
+      box-shadow: 0 0 32px rgba(201, 169, 97, 0.4);
+    }
+
+    .player-panel.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #C9A961, #E6C88A);
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .player-emoji {
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .player-name {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #C9A961;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .player-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .player-stat {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(60, 60, 67, 0.3);
+      border-radius: 0.75rem;
+    }
+
+    .player-stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #C9A961;
+    }
+
+    .player-stat-label {
+      font-size: 0.7rem;
+      color: #636366;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.25rem;
+    }
+
+    .powerup-display {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(84, 84, 88, 0.3);
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .powerup-item {
+      background: rgba(60, 60, 67, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(84, 84, 88, 0.3);
+    }
+
+    .powerup-item.active {
+      background: rgba(201, 169, 97, 0.2);
+      border-color: #C9A961;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* ROUND INDICATOR */
+    .round-indicator {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(201, 169, 97, 0.1);
+      border-radius: 1rem;
+      border: 1px solid rgba(201, 169, 97, 0.3);
+    }
+
+    .round-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #C9A961;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .round-progress {
+      margin-top: 1rem;
+      height: 12px;
+      background: rgba(84, 84, 88, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .round-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #C9A961, #E6C88A);
+      border-radius: 6px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* BOARD */
+    .board-container {
+      background: rgba(28, 28, 30, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .board {
+      display: grid;
+      gap: 1rem;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .board.size-3 { grid-template-columns: repeat(3, 1fr); }
+    .board.size-4 { grid-template-columns: repeat(4, 1fr); }
+    .board.size-5 { grid-template-columns: repeat(5, 1fr); }
+
+    .cell {
+      aspect-ratio: 1;
+      background: rgba(28, 28, 30, 0.6);
+      border: 2px solid rgba(84, 84, 88, 0.4);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cell:hover:not(.claimed-X):not(.claimed-O):not(.special-cell)::before {
+      opacity: 1;
+    }
+
+    .cell:hover:not(.claimed-X):not(.claimed-O) {
+      transform: scale(1.05);
+      border-color: rgba(201, 169, 97, 0.6);
+      box-shadow: 0 8px 24px rgba(201, 169, 97, 0.3);
+    }
+
+    .cell.claimed-X {
+      background: rgba(255, 59, 48, 0.2);
+      border-color: #ff3b30;
+      cursor: not-allowed;
+    }
+
+    .cell.claimed-O {
+      background: rgba(52, 199, 89, 0.2);
+      border-color: #34c759;
+      cursor: not-allowed;
+    }
+
+    .cell.special-cell {
+      background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(230, 200, 138, 0.2));
+      border-color: #C9A961;
+      animation: specialGlow 3s ease-in-out infinite;
+    }
+
+    .cell.special-cell::after {
+      content: '⭐';
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      font-size: 1rem;
+    }
+
+    @keyframes specialGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(201, 169, 97, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(201, 169, 97, 0.6); }
+    }
+
+    /* TIMER */
+    .timer-container {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(28, 28, 30, 0.95);
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      border: 2px solid rgba(84, 84, 88, 0.4);
+      backdrop-filter: blur(10px);
+      display: none;
+    }
+
+    .timer-container.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+
+    .timer-display {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #C9A961;
+      text-align: center;
+    }
+
+    .timer-display.warning {
+      color: #ff9500;
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    .timer-display.danger {
+      color: #ff3b30;
+      animation: timerPulse 0.5s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* CONTROL BUTTONS */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #C9A961 0%, #E6C88A 100%);
+      color: #0d0d0d;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(201, 169, 97, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(60, 60, 67, 0.5);
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      color: #e5e5e7;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(60, 60, 67, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-powerup {
+      background: rgba(201, 169, 97, 0.2);
+      border: 1px solid #C9A961;
+      color: #C9A961;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-powerup:hover:not(:disabled) {
+      background: rgba(201, 169, 97, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: rgba(28, 28, 30, 0.98);
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 650px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal::-webkit-scrollbar { width: 8px; }
+    .modal::-webkit-scrollbar-track { background: transparent; }
+    .modal::-webkit-scrollbar-thumb {
+      background: rgba(201, 169, 97, 0.3);
+      border-radius: 4px;
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(84, 84, 88, 0.3);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      color: #C9A961;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .question-counter {
+      text-align: center;
+      color: #8e8e93;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .question-card {
+      background: rgba(60, 60, 67, 0.3);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(84, 84, 88, 0.3);
+      position: relative;
+    }
+
+    .question-difficulty {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .question-difficulty.easy {
+      background: rgba(52, 199, 89, 0.2);
+      color: #34c759;
+    }
+
+    .question-difficulty.medium {
+      background: rgba(255, 149, 0, 0.2);
+      color: #ff9500;
+    }
+
+    .question-difficulty.hard {
+      background: rgba(255, 59, 48, 0.2);
+      color: #ff3b30;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: #e5e5e7;
+      font-weight: 500;
+      padding-right: 5rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .option-btn {
+      padding: 1rem;
+      background: rgba(28, 28, 30, 0.6);
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      border-radius: 0.75rem;
+      color: #e5e5e7;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: rgba(60, 60, 67, 0.6);
+      border-color: rgba(201, 169, 97, 0.5);
+      transform: translateX(4px);
+    }
+
+    .option-btn.selected {
+      background: rgba(201, 169, 97, 0.2);
+      border-color: #C9A961;
+      font-weight: 600;
+    }
+
+    .option-btn.correct {
+      background: rgba(52, 199, 89, 0.2);
+      border-color: #34c759;
+      color: #34c759;
+      font-weight: 700;
+    }
+
+    .option-btn.wrong {
+      background: rgba(255, 59, 48, 0.2);
+      border-color: #ff3b30;
+      color: #ff3b30;
+      font-weight: 700;
+    }
+
+    .option-btn:disabled { cursor: not-allowed; }
+
+    .feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .feedback.correct {
+      background: rgba(52, 199, 89, 0.15);
+      border: 1px solid rgba(52, 199, 89, 0.3);
+      color: #34c759;
+      display: block;
+    }
+
+    .feedback.wrong {
+      background: rgba(255, 59, 48, 0.15);
+      border: 1px solid rgba(255, 59, 48, 0.3);
+      color: #ff3b30;
+      display: block;
+    }
+
+    .explanation {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: rgba(201, 169, 97, 0.1);
+      border-left: 3px solid #C9A961;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      color: #8e8e93;
+      line-height: 1.5;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(84, 84, 88, 0.3);
+    }
+
+    .feedback-global {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .feedback-global.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .feedback-global.success {
+      background: rgba(52, 199, 89, 0.95);
+      color: white;
+    }
+
+    .feedback-global.error {
+      background: rgba(255, 59, 48, 0.95);
+      color: white;
+    }
+
+    /* ACHIEVEMENTS PANEL */
+    .achievements-panel {
+      background: rgba(28, 28, 30, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(84, 84, 88, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .achievement-card {
+      background: rgba(60, 60, 67, 0.3);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      border: 1px solid rgba(84, 84, 88, 0.3);
+      transition: all 0.3s;
+    }
+
+    .achievement-card.unlocked {
+      background: rgba(201, 169, 97, 0.15);
+      border-color: #C9A961;
+    }
+
+    .achievement-card:hover.unlocked {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(201, 169, 97, 0.3);
+    }
+
+    .achievement-card .achievement-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      filter: grayscale(100%);
+      opacity: 0.3;
+    }
+
+    .achievement-card.unlocked .achievement-icon {
+      filter: none;
+      opacity: 1;
+    }
+
+    .achievement-card .achievement-name {
+      font-size: 0.9rem;
+      color: #636366;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .achievement-card.unlocked .achievement-name {
+      color: #C9A961;
+    }
+
+    .achievement-card .achievement-desc {
+      font-size: 0.75rem;
+      color: #48484a;
+      line-height: 1.3;
+    }
+
+    .achievement-card.unlocked .achievement-desc {
+      color: #8e8e93;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+      .scoreboard { flex-direction: column; }
+      .player-stats { grid-template-columns: repeat(3, 1fr); }
+      .cell { font-size: 2rem; }
+      .options-grid { grid-template-columns: 1fr; }
+      .profile-badge { position: static; margin-bottom: 1rem; }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="profile-badge" onclick="showAchievements()">
+        <span class="achievement-icon">🏆</span>
+        <span class="xp-display" id="xpDisplay">Level 1 • 0 XP</span>
+      </div>
+      <h1>INTUITY</h1>
+      <div class="tagline">Ultimate Grammar Battle</div>
+    </div>
+
+    <!-- MODE SELECTOR -->
+    <div id="modeSelector" class="mode-selector">
+      <div class="mode-card" onclick="selectMode('quick')">
+        <div class="mode-icon">⚡</div>
+        <div class="mode-title">Quick Match</div>
+        <div class="mode-desc">Classic 3×3 grid, best of 1 round</div>
+        <div class="mode-stats">
+          <div class="stat">
+            <div class="stat-value">3×3</div>
+            <div class="stat-label">Grid</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Round</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Q/Cell</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('best-of-3')">
+        <div class="mode-icon">🏆</div>
+        <div class="mode-title">Best of 3</div>
+        <div class="mode-desc">3 rounds, winner takes the match</div>
+        <div class="mode-stats">
+          <div class="stat">
+            <div class="stat-value">3×3</div>
+            <div class="stat-label">Grid</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Rounds</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Q/Cell</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('marathon')">
+        <div class="mode-icon">🚀</div>
+        <div class="mode-title">Marathon</div>
+        <div class="mode-desc">4×4 grid, 3 questions per cell, speed mode</div>
+        <div class="mode-stats">
+          <div class="stat">
+            <div class="stat-value">4×4</div>
+            <div class="stat-label">Grid</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Round</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Q/Cell</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('custom')">
+        <div class="mode-icon">⚙️</div>
+        <div class="mode-title">Custom</div>
+        <div class="mode-desc">Customize grid size, rounds, and difficulty</div>
+        <div class="mode-stats">
+          <div class="stat">
+            <div class="stat-value">?</div>
+            <div class="stat-label">Custom</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">?</div>
+            <div class="stat-label">Custom</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">?</div>
+            <div class="stat-label">Custom</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME SETTINGS -->
+    <div id="gameSettings" class="game-settings hidden">
+      <h2 style="color: #C9A961; margin-bottom: 1.5rem; text-align: center; text-transform: uppercase; letter-spacing: 2px;">Game Settings</h2>
+      
+      <div class="settings-grid">
+        <div class="setting-group">
+          <div class="setting-label">Grid Size</div>
+          <div class="setting-value" id="gridSizeValue">3×3</div>
+          <input type="range" class="slider" id="gridSizeSlider" min="3" max="5" value="3" oninput="updateGridSize(this.value)">
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">Total Rounds</div>
+          <div class="setting-value" id="roundsValue">1</div>
+          <input type="range" class="slider" id="roundsSlider" min="1" max="5" value="1" oninput="updateRounds(this.value)">
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">Questions per Cell</div>
+          <div class="setting-value" id="questionsValue">5</div>
+          <input type="range" class="slider" id="questionsSlider" min="3" max="7" value="5" oninput="updateQuestions(this.value)">
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">Difficulty Level</div>
+          <div class="difficulty-selector">
+            <button class="difficulty-btn active" onclick="setDifficulty('easy')">Easy</button>
+            <button class="difficulty-btn" onclick="setDifficulty('medium')">Medium</button>
+            <button class="difficulty-btn" onclick="setDifficulty('hard')">Hard</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">Timer Mode</div>
+          <div class="checkbox-group">
+            <input type="checkbox" class="checkbox" id="timerCheckbox" onchange="updateTimer(this.checked)">
+            <label for="timerCheckbox" style="color: #8e8e93; font-size: 0.9rem;">30s per question</label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">Special Cells</div>
+          <div class="checkbox-group">
+            <input type="checkbox" class="checkbox" id="specialCellsCheckbox" checked onchange="updateSpecialCells(this.checked)">
+            <label for="specialCellsCheckbox" style="color: #8e8e93; font-size: 0.9rem;">Enable power-ups</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="backToModes()">← Back</button>
+        <button class="btn btn-primary" onclick="startGame()">Start Game →</button>
+      </div>
+    </div>
+
+    <!-- GAME AREA -->
+    <div id="gameArea" class="hidden">
+      <!-- TIMER -->
+      <div class="timer-container" id="timerContainer">
+        <div class="timer-display" id="timerDisplay">30</div>
+      </div>
+
+      <!-- ROUND INDICATOR -->
+      <div class="round-indicator">
+        <div class="round-text" id="roundText">Round 1 of 1</div>
+        <div class="round-progress">
+          <div class="round-progress-bar" id="roundProgressBar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- SCOREBOARD -->
+      <div class="scoreboard">
+        <div class="player-panel" id="panelX">
+          <div class="player-emoji">❌</div>
+          <div class="player-name">Player X</div>
+          <div class="player-stats">
+            <div class="player-stat">
+              <div class="player-stat-value" id="winsX">0</div>
+              <div class="player-stat-label">Rounds Won</div>
+            </div>
+            <div class="player-stat">
+              <div class="player-stat-value" id="cellsX">0</div>
+              <div class="player-stat-label">Cells</div>
+            </div>
+            <div class="player-stat">
+              <div class="player-stat-value" id="correctX">0</div>
+              <div class="player-stat-label">Correct</div>
+            </div>
+          </div>
+          <div class="powerup-display" id="powerupsX"></div>
+        </div>
+
+        <div class="player-panel" id="panelO">
+          <div class="player-emoji">⭕</div>
+          <div class="player-name">Player O</div>
+          <div class="player-stats">
+            <div class="player-stat">
+              <div class="player-stat-value" id="winsO">0</div>
+              <div class="player-stat-label">Rounds Won</div>
+            </div>
+            <div class="player-stat">
+              <div class="player-stat-value" id="cellsO">0</div>
+              <div class="player-stat-label">Cells</div>
+            </div>
+            <div class="player-stat">
+              <div class="player-stat-value" id="correctO">0</div>
+              <div class="player-stat-label">Correct</div>
+            </div>
+          </div>
+          <div class="powerup-display" id="powerupsO"></div>
+        </div>
+      </div>
+
+      <!-- BOARD -->
+      <div class="board-container">
+        <div class="board size-3" id="board"></div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="backToMenu()" id="backBtn">← Main Menu</button>
+        <button class="btn btn-powerup" onclick="usePowerup('5050')" id="btn5050" disabled>💡 50/50 (0)</button>
+        <button class="btn btn-powerup" onclick="usePowerup('skip')" id="btnSkip" disabled>⏭️ Skip (0)</button>
+        <button class="btn btn-secondary" onclick="forfeitGame()" id="forfeitBtn">Forfeit Round</button>
+        <button class="btn btn-primary" onclick="nextRound()" id="nextRoundBtn" style="display: none;">Next Round →</button>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS PANEL -->
+    <div id="achievementsPanel" class="achievements-panel hidden">
+      <h2 style="color: #C9A961; margin-bottom: 1.5rem; text-align: center; text-transform: uppercase; letter-spacing: 2px;">Achievements</h2>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+      <div class="controls" style="margin-top: 2rem;">
+        <button class="btn btn-secondary" onclick="closeAchievements()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" id="questionModal" onclick="event.stopPropagation()">
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="feedback-global" id="globalFeedback"></div>
+
+  <script>
+    // MASSIVE QUESTION BANK
+    const QUESTION_BANK = {
+      "PresentSimple": {
+        easy: [
+          {q:"She _____ to school every day by bus.",opts:["go","goes","going","went"],ans:1,exp:"Use 'goes' with third person singular (he/she/it) in Present Simple."},
+          {q:"Water _____ at 100 degrees Celsius.",opts:["boil","boils","is boiling","boiled"],ans:1,exp:"Facts and scientific truths use Present Simple. Add 's' for third person singular."},
+          {q:"They _____ football on weekends regularly.",opts:["play","plays","playing","played"],ans:0,exp:"Use base form 'play' with plural subjects (they/we) in Present Simple."},
+          {q:"My brother _____ his homework after dinner.",opts:["does","do","doing","did"],ans:0,exp:"'Does' is correct for third person singular. 'Do' would be used with I/you/we/they."}
+        ],
+        medium: [
+          {q:"_____ you _____ coffee in the morning?",opts:["Do / drink","Does / drink","Are / drinking","Did / drink"],ans:0,exp:"Questions with 'you' use 'Do' + base verb in Present Simple."},
+          {q:"The sun _____ in the east every day.",opts:["rise","rises","is rising","rose"],ans:1,exp:"Natural phenomena use Present Simple. Third person singular adds 's'."},
+          {q:"We _____ English three times a week.",opts:["study","studies","are studying","studied"],ans:0,exp:"Scheduled regular activities use Present Simple. 'We' takes base form."}
+        ],
+        hard: [
+          {q:"He _____ his teeth twice daily.",opts:["brush","brushes","is brushing","brushed"],ans:1,exp:"Daily routines use Present Simple. Third person singular adds 'es' after 'sh'."},
+          {q:"I _____ milk - I'm lactose intolerant.",opts:["don't drink","doesn't drink","am not drinking","didn't drink"],ans:0,exp:"Negative Present Simple with I/you/we/they uses 'don't' + base verb."}
+        ]
+      },
+      "PresentContinuous": {
+        easy: [
+          {q:"Look! The baby _____ his first steps!",opts:["take","takes","is taking","took"],ans:2,exp:"Actions happening now use Present Continuous (am/is/are + -ing)."},
+          {q:"Shh! I _____ to music right now.",opts:["listen","listens","am listening","listened"],ans:2,exp:"'Right now' indicates Present Continuous. 'I' uses 'am' + verb-ing."},
+          {q:"Why _____ you _____ ? Is something funny?",opts:["do / laugh","does / laugh","are / laughing","did / laugh"],ans:2,exp:"Questions about current actions use am/is/are + subject + verb-ing."}
+        ],
+        medium: [
+          {q:"They _____ dinner at the moment.",opts:["have","has","are having","had"],ans:2,exp:"'At the moment' signals Present Continuous. Plural subjects use 'are'."},
+          {q:"I can't talk - I _____ for a test.",opts:["study","studies","am studying","studied"],ans:2,exp:"Temporary situations happening now use Present Continuous."},
+          {q:"She _____ a shower right now.",opts:["take","takes","is taking","took"],ans:2,exp:"Actions in progress use is/am/are + verb-ing."}
+        ],
+        hard: [
+          {q:"We _____ TV at this moment.",opts:["watch","watches","are watching","watched"],ans:2,exp:"Present Continuous for actions happening exactly now."},
+          {q:"The children _____ in the park now.",opts:["play","plays","are playing","played"],ans:2,exp:"Plural subjects use 'are' + verb-ing in Present Continuous."}
+        ]
+      },
+      "Contrast": {
+        easy: [
+          {q:"I usually _____ by bus, but today I _____ .",opts:["go / walk","go / am walking","am going / walk","goes / walking"],ans:1,exp:"'Usually' signals habit (Present Simple), 'today' signals temporary action (Present Continuous)."},
+          {q:"She normally _____ tea, but now she _____ coffee.",opts:["drink / drinks","drinks / is drinking","is drinking / drinks","drinks / drinks"],ans:1,exp:"Habits use Present Simple, current temporary actions use Present Continuous."}
+        ],
+        medium: [
+          {q:"We _____ English every day and now we _____ .",opts:["study / study","study / are studying","are studying / study","studies / studying"],ans:1,exp:"Routine = Simple, happening now = Continuous."},
+          {q:"He always _____ his bike, but today it _____ .",opts:["ride / rains","rides / is raining","is riding / rains","rides / rains"],ans:1,exp:"'Always' = habit (Simple), weather right now = Continuous."}
+        ],
+        hard: [
+          {q:"They _____ meat usually, but tonight they _____ steak.",opts:["don't eat / eat","don't eat / are eating","aren't eating / eat","doesn't eat / eating"],ans:1,exp:"General habits use Simple, specific temporary action uses Continuous."},
+          {q:"I _____ what you mean usually, but now I _____ .",opts:["understand / understand","understand / don't understand","am understanding / don't understand","understands / am not understanding"],ans:1,exp:"Stative verbs like 'understand' rarely use Continuous in standard English."}
+        ]
+      },
+      "Modals": {
+        easy: [
+          {q:"You _____ wear a seatbelt - it's the law.",opts:["should","must","could","might"],ans:1,exp:"'Must' expresses strong obligation or law."},
+          {q:"He _____ study harder if he wants better grades.",opts:["can","should","would","may"],ans:1,exp:"'Should' gives advice or recommendation."}
+        ],
+        medium: [
+          {q:"I _____ swim when I was five years old.",opts:["can","could","should","must"],ans:1,exp:"'Could' expresses past ability."},
+          {q:"_____ I borrow your pen, please?",opts:["Must","Should","May","Need"],ans:2,exp:"'May' is polite for asking permission."},
+          {q:"She _____ be tired - she worked all night.",opts:["can","could","must","should"],ans:2,exp:"'Must' expresses logical deduction or strong probability."}
+        ],
+        hard: [
+          {q:"We _____ leave now or we'll miss the train.",opts:["can","may","might","must"],ans:3,exp:"'Must' expresses urgent necessity."},
+          {q:"You _____ eat more vegetables for your health.",opts:["must","should","would","may"],ans:1,exp:"'Should' is softer advice than 'must' (obligation)."}
+        ]
+      },
+      "PastSimple": {
+        easy: [
+          {q:"I _____ to Paris last summer.",opts:["go","went","gone","going"],ans:1,exp:"'Went' is the irregular past form of 'go'. Use it with time expressions like 'last summer'."},
+          {q:"She _____ her keys yesterday.",opts:["lose","lost","losed","losing"],ans:1,exp:"'Lost' is the irregular past form. Past Simple describes completed past actions."}
+        ],
+        medium: [
+          {q:"We _____ a great time at the party.",opts:["have","had","having","has"],ans:1,exp:"'Had' is the past of 'have'. Used for completed past experiences."},
+          {q:"They _____ the movie last night.",opts:["watch","watched","watching","watches"],ans:1,exp:"Regular verbs add -ed in Past Simple."},
+          {q:"He _____ his homework before dinner.",opts:["finish","finished","finishing","finishes"],ans:1,exp:"Past Simple for actions completed at a specific past time."}
+        ],
+        hard: [
+          {q:"_____ you _____ to the concert?",opts:["Do / go","Did / go","Did / went","Does / go"],ans:1,exp:"Questions use 'Did' + base form, not 'Did' + past form."},
+          {q:"I _____ TV yesterday evening.",opts:["don't watch","didn't watch","wasn't watching","doesn't watch"],ans:1,exp:"Past Simple negative: didn't + base verb."}
+        ]
+      },
+      "Questions": {
+        easy: [
+          {q:"_____ is your best friend at school?",opts:["What","When","Who","How"],ans:2,exp:"'Who' asks about people/identities."},
+          {q:"_____ do you live now?",opts:["What","When","Where","Who"],ans:2,exp:"'Where' asks about places/locations."}
+        ],
+        medium: [
+          {q:"_____ time do you wake up?",opts:["Where","What","Who","When"],ans:1,exp:"'What time' asks about specific clock time."},
+          {q:"_____ do you go to school?",opts:["How","What","Who","Where"],ans:0,exp:"'How' asks about manner/method (by bus, walking, etc.)."},
+          {q:"_____ is your birthday?",opts:["Where","What","Who","When"],ans:3,exp:"'When' asks about time/dates."}
+        ],
+        hard: [
+          {q:"_____ old are you this year?",opts:["What","When","Where","How"],ans:3,exp:"'How old' asks about age. 'How' combines with adjectives."},
+          {q:"_____ does this bus go?",opts:["What","When","Where","Who"],ans:2,exp:"'Where' asks about destination/direction."}
+        ]
+      },
+      "Conditionals": {
+        easy: [
+          {q:"If it _____ tomorrow, we'll stay home.",opts:["rain","rains","will rain","rained"],ans:1,exp:"First Conditional: If + Present Simple, will + base verb."},
+          {q:"If I _____ enough money, I'll buy it.",opts:["have","has","will have","had"],ans:0,exp:"Use Present Simple in the 'if' clause of First Conditional."}
+        ],
+        medium: [
+          {q:"If I _____ you, I would apologize.",opts:["am","was","were","will be"],ans:2,exp:"Second Conditional uses 'were' for all subjects (formal)."},
+          {q:"She would help you if she _____ time.",opts:["has","have","had","will have"],ans:2,exp:"Second Conditional: If + Past Simple, would + base verb."}
+        ],
+        hard: [
+          {q:"If they _____ harder, they would have passed.",opts:["studied","had studied","study","would study"],ans:1,exp:"Third Conditional: If + Past Perfect for unreal past situations."},
+          {q:"Unless you _____, you won't succeed.",opts:["try","tries","will try","tried"],ans:0,exp:"'Unless' = if not. Use Present Simple after 'unless' in First Conditional."}
+        ]
+      },
+      "Prepositions": {
+        easy: [
+          {q:"I'll meet you _____ 3 o'clock.",opts:["in","on","at","for"],ans:2,exp:"Use 'at' with specific times (at 3pm, at noon)."},
+          {q:"She was born _____ May.",opts:["in","on","at","for"],ans:0,exp:"Use 'in' with months and years."}
+        ],
+        medium: [
+          {q:"The book is _____ the table.",opts:["in","on","at","to"],ans:1,exp:"'On' indicates surface contact."},
+          {q:"We arrived _____ London yesterday.",opts:["in","on","at","to"],ans:0,exp:"Use 'in' with cities and countries (arrive in/at)."},
+          {q:"They've lived here _____ 2010.",opts:["for","since","from","during"],ans:1,exp:"'Since' is used with a specific point in time."}
+        ],
+        hard: [
+          {q:"I've been waiting _____ two hours.",opts:["for","since","from","during"],ans:0,exp:"'For' is used with duration/period of time."},
+          {q:"He's good _____ mathematics.",opts:["in","on","at","with"],ans:2,exp:"'Good at' is the correct collocation for skills/subjects."}
+        ]
+      },
+      "Articles": {
+        easy: [
+          {q:"I have _____ apple in my bag.",opts:["a","an","the","—"],ans:1,exp:"'An' before words starting with vowel sounds."},
+          {q:"_____ sun rises in the east.",opts:["A","An","The","—"],ans:2,exp:"Use 'the' with unique natural phenomena."}
+        ],
+        medium: [
+          {q:"She's _____ teacher at my school.",opts:["a","an","the","—"],ans:0,exp:"'A' before jobs/professions when first mentioned."},
+          {q:"I play _____ piano every day.",opts:["a","an","the","—"],ans:2,exp:"Use 'the' with musical instruments."},
+          {q:"_____ dogs are loyal animals.",opts:["A","An","The","—"],ans:3,exp:"No article when talking about things in general (plural)."}
+        ],
+        hard: [
+          {q:"He went to _____ bed early.",opts:["a","an","the","—"],ans:3,exp:"No article with 'bed' when meaning sleep (same with school, work)."},
+          {q:"I need _____ advice about my career.",opts:["a","an","the","some"],ans:3,exp:"'Advice' is uncountable, use 'some' not 'a/an'."}
+        ]
+      },
+      "Comparatives": {
+        easy: [
+          {q:"This book is _____ than that one.",opts:["good","better","best","more good"],ans:1,exp:"'Better' is the irregular comparative of 'good'."},
+          {q:"She's _____ than her brother.",opts:["tall","taller","tallest","more tall"],ans:1,exp:"One-syllable adjectives add -er for comparatives."}
+        ],
+        medium: [
+          {q:"This is the _____ movie I've ever seen.",opts:["good","better","best","more good"],ans:2,exp:"'Best' is the superlative form of 'good'."},
+          {q:"English is _____ than I thought.",opts:["easy","easier","easiest","more easy"],ans:1,exp:"Two-syllable adjectives ending in -y: change y to i and add -er."},
+          {q:"He runs _____ than anyone else.",opts:["fast","faster","fastest","more fast"],ans:1,exp:"One-syllable adverbs add -er."}
+        ],
+        hard: [
+          {q:"This is _____ interesting book in the library.",opts:["more","most","the most","the more"],ans:2,exp:"Long adjectives use 'the most' for superlatives."},
+          {q:"She speaks _____ fluently than before.",opts:["more","most","the most","much"],ans:0,exp:"Long adverbs use 'more' for comparatives."}
+        ]
+      },
+      "PerfectTenses": {
+        easy: [
+          {q:"I _____ never been to Japan.",opts:["has","have","had","having"],ans:1,exp:"Present Perfect: have/has + past participle. Use with life experiences."},
+          {q:"She _____ just finished her homework.",opts:["has","have","had","is"],ans:0,exp:"'Has' with third person singular in Present Perfect."}
+        ],
+        medium: [
+          {q:"They _____ here since 2015.",opts:["live","lived","have lived","are living"],ans:2,exp:"Present Perfect with 'since' for actions continuing to now."},
+          {q:"_____ you ever _____ sushi?",opts:["Do / eat","Did / eat","Have / eaten","Are / eating"],ans:2,exp:"Questions about life experiences use 'Have' + past participle."},
+          {q:"He _____ already seen that movie.",opts:["has","have","had","is"],ans:0,exp:"'Already' often used with Present Perfect to emphasize completion."}
+        ],
+        hard: [
+          {q:"By the time we arrived, they _____ .",opts:["left","have left","had left","leaving"],ans:2,exp:"Past Perfect for action completed before another past action."},
+          {q:"I _____ three coffees today.",opts:["drink","drank","have drunk","had drunk"],ans:2,exp:"Present Perfect with unfinished time period ('today' isn't over)."}
+        ]
+      },
+      "Passive": {
+        easy: [
+          {q:"The house _____ built in 1990.",opts:["is","was","are","were"],ans:1,exp:"Passive voice: be + past participle. Use 'was' for singular past."},
+          {q:"English _____ spoken here.",opts:["is","are","was","were"],ans:0,exp:"Present Simple Passive: is/are + past participle."}
+        ],
+        medium: [
+          {q:"The letter _____ sent yesterday.",opts:["is","was","has been","had been"],ans:1,exp:"Past Simple Passive: was/were + past participle."},
+          {q:"The work _____ by tomorrow.",opts:["finishes","will finish","will be finished","is finishing"],ans:2,exp:"Future Passive: will be + past participle."},
+          {q:"The building _____ damaged in the storm.",opts:["is","was","has been","had been"],ans:1,exp:"Past Simple Passive for completed past events."}
+        ],
+        hard: [
+          {q:"The report _____ written when the boss called.",opts:["is being","was being","has been","had been"],ans:1,exp:"Past Continuous Passive: was/were being + past participle."},
+          {q:"The car _____ repaired since Monday.",opts:["is","was","has been","had been"],ans:2,exp:"Present Perfect Passive: has/have been + past participle."}
+        ]
+      }
+    };
+
+    // ACHIEVEMENTS SYSTEM
+    const ACHIEVEMENTS = {
+      first_win: {icon:"🎯",name:"First Victory",desc:"Win your first round",unlocked:false},
+      perfectionist: {icon:"💯",name:"Perfectionist",desc:"Answer all questions correctly",unlocked:false},
+      speed_demon: {icon:"⚡",name:"Speed Demon",desc:"Complete 5 questions in under 60s",unlocked:false},
+      comeback_king: {icon:"👑",name:"Comeback King",desc:"Win after being behind",unlocked:false},
+      marathon_master: {icon:"🏃",name:"Marathon Master",desc:"Complete a 4×4 grid game",unlocked:false},
+      grammar_guru: {icon:"📚",name:"Grammar Guru",desc:"Get 50 questions correct",unlocked:false},
+      power_player: {icon:"⚡",name:"Power Player",desc:"Use all power-ups in one game",unlocked:false},
+      triple_threat: {icon:"🏆",name:"Triple Threat",desc:"Win Best of 3 mode",unlocked:false},
+      question_master: {icon:"🎓",name:"Question Master",desc:"Answer 100 questions",unlocked:false},
+      streak_master: {icon:"🔥",name:"Streak Master",desc:"Get 10 correct in a row",unlocked:false}
+    };
+
+    // GAME STATE
+    const GAME = {
+      mode: null,
+      settings: {
+        gridSize: 3,
+        totalRounds: 1,
+        questionsPerCell: 5,
+        timerEnabled: false,
+        difficulty: 'easy',
+        specialCellsEnabled: true
+      },
+      state: {
+        currentRound: 1,
+        boardState: [],
+        cellQuestionSets: {},
+        specialCells: [],
+        usedQuestionIds: new Set(),
+        currentTurn: 'X',
+        activeCell: null,
+        stats: {
+          X: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} },
+          O: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} }
+        },
+        timer: null,
+        timeLeft: 30,
+        activePowerup: null,
+        totalQuestionsAnswered: 0,
+        questionStartTime: 0
+      },
+      selectedAnswers: {},
+      profile: {
+        xp: 0,
+        level: 1,
+        totalCorrect: 0,
+        totalQuestions: 0,
+        achievements: {...ACHIEVEMENTS}
+      }
+    };
+
+    // Load saved progress
+    function loadProgress() {
+      const saved = localStorage.getItem('intuityProgress');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          GAME.profile = {...GAME.profile, ...data};
+        } catch(e) {}
+      }
+      updateXPDisplay();
+    }
+
+    // Save progress
+    function saveProgress() {
+      localStorage.setItem('intuityProgress', JSON.stringify(GAME.profile));
+    }
+
+    // Update XP display
+    function updateXPDisplay() {
+      const level = GAME.profile.level;
+      const xp = GAME.profile.xp;
+      document.getElementById('xpDisplay').textContent = `Level ${level} • ${xp} XP`;
+    }
+
+    // Award XP
+    function awardXP(amount, reason) {
+      GAME.profile.xp += amount;
+      const xpForNextLevel = GAME.profile.level * 100;
+      
+      if (GAME.profile.xp >= xpForNextLevel) {
+        GAME.profile.level++;
+        GAME.profile.xp = GAME.profile.xp - xpForNextLevel;
+        showFeedback(`🎊 Level Up! You're now Level ${GAME.profile.level}!`, false);
+      }
+      
+      updateXPDisplay();
+      saveProgress();
+    }
+
+    // Unlock achievement
+    function unlockAchievement(key) {
+      if (!GAME.profile.achievements[key].unlocked) {
+        GAME.profile.achievements[key].unlocked = true;
+        const ach = GAME.profile.achievements[key];
+        showFeedback(`🏆 Achievement Unlocked: ${ach.name}!`, false);
+        awardXP(50, 'achievement');
+        saveProgress();
+      }
+    }
+
+    // Check achievements
+    function checkAchievements() {
+      const stats = GAME.state.stats;
+      const currentPlayer = stats[GAME.state.currentTurn];
+      
+      // First win
+      if ((stats.X.roundsWon > 0 || stats.O.roundsWon > 0) && !GAME.profile.achievements.first_win.unlocked) {
+        unlockAchievement('first_win');
+      }
+      
+      // Marathon master
+      if (GAME.settings.gridSize === 4 && !GAME.profile.achievements.marathon_master.unlocked) {
+        unlockAchievement('marathon_master');
+      }
+      
+      // Grammar guru
+      if (GAME.profile.totalCorrect >= 50 && !GAME.profile.achievements.grammar_guru.unlocked) {
+        unlockAchievement('grammar_guru');
+      }
+      
+      // Question master
+      if (GAME.profile.totalQuestions >= 100 && !GAME.profile.achievements.question_master.unlocked) {
+        unlockAchievement('question_master');
+      }
+      
+      // Streak master
+      if (currentPlayer.streak >= 10 && !GAME.profile.achievements.streak_master.unlocked) {
+        unlockAchievement('streak_master');
+      }
+      
+      // Triple threat
+      if (GAME.mode === 'best-of-3' && (stats.X.roundsWon >= 2 || stats.O.roundsWon >= 2)) {
+        unlockAchievement('triple_threat');
+      }
+    }
+
+    // Show achievements panel
+    function showAchievements() {
+      document.getElementById('modeSelector').classList.add('hidden');
+      document.getElementById('achievementsPanel').classList.remove('hidden');
+      renderAchievements();
+    }
+
+    // Close achievements
+    function closeAchievements() {
+      document.getElementById('achievementsPanel').classList.add('hidden');
+      document.getElementById('modeSelector').classList.remove('hidden');
+    }
+
+    // Render achievements
+    function renderAchievements() {
+      const grid = document.getElementById('achievementsGrid');
+      grid.innerHTML = '';
+      
+      Object.keys(GAME.profile.achievements).forEach(key => {
+        const ach = GAME.profile.achievements[key];
+        const card = document.createElement('div');
+        card.className = `achievement-card ${ach.unlocked ? 'unlocked' : ''}`;
+        card.innerHTML = `
+          <div class="achievement-icon">${ach.icon}</div>
+          <div class="achievement-name">${ach.name}</div>
+          <div class="achievement-desc">${ach.desc}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // MODE PRESETS
+    const MODE_PRESETS = {
+      'quick': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, timerEnabled: false, difficulty: 'easy', specialCellsEnabled: true },
+      'best-of-3': { gridSize: 3, totalRounds: 3, questionsPerCell: 5, timerEnabled: false, difficulty: 'medium', specialCellsEnabled: true },
+      'marathon': { gridSize: 4, totalRounds: 1, questionsPerCell: 3, timerEnabled: true, difficulty: 'medium', specialCellsEnabled: true },
+      'custom': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, timerEnabled: false, difficulty: 'easy', specialCellsEnabled: true }
+    };
+
+    // SELECT MODE
+    function selectMode(mode) {
+      GAME.mode = mode;
+      const settings = MODE_PRESETS[mode];
+      
+      GAME.settings = {...settings};
+      
+      if (mode === 'custom') {
+        document.getElementById('modeSelector').classList.add('hidden');
+        document.getElementById('gameSettings').classList.remove('hidden');
+        
+        document.getElementById('gridSizeSlider').value = settings.gridSize;
+        document.getElementById('roundsSlider').value = settings.totalRounds;
+        document.getElementById('questionsSlider').value = settings.questionsPerCell;
+        document.getElementById('timerCheckbox').checked = settings.timerEnabled;
+        document.getElementById('specialCellsCheckbox').checked = settings.specialCellsEnabled;
+        
+        updateGridSize(settings.gridSize);
+        updateRounds(settings.totalRounds);
+        updateQuestions(settings.questionsPerCell);
+        setDifficulty(settings.difficulty);
+      } else {
+        startGame();
+      }
+    }
+
+    // UPDATE SETTINGS
+    function updateGridSize(val) {
+      GAME.settings.gridSize = parseInt(val);
+      document.getElementById('gridSizeValue').textContent = `${val}×${val}`;
+    }
+
+    function updateRounds(val) {
+      GAME.settings.totalRounds = parseInt(val);
+      document.getElementById('roundsValue').textContent = val;
+    }
+
+    function updateQuestions(val) {
+      GAME.settings.questionsPerCell = parseInt(val);
+      document.getElementById('questionsValue').textContent = val;
+    }
+
+    function updateTimer(checked) {
+      GAME.settings.timerEnabled = checked;
+    }
+
+    function updateSpecialCells(checked) {
+      GAME.settings.specialCellsEnabled = checked;
+    }
+
+    function setDifficulty(level) {
+      GAME.settings.difficulty = level;
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function backToModes() {
+      document.getElementById('gameSettings').classList.add('hidden');
+      document.getElementById('modeSelector').classList.remove('hidden');
+    }
+
+    // START GAME
+    function startGame() {
+      const size = GAME.settings.gridSize;
+      GAME.state.boardState = Array(size * size).fill(null);
+      GAME.state.currentRound = 1;
+      GAME.state.currentTurn = 'X';
+      GAME.state.cellQuestionSets = {};
+      GAME.state.usedQuestionIds.clear();
+      GAME.state.totalQuestionsAnswered = 0;
+      GAME.state.stats = {
+        X: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} },
+        O: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} }
+      };
+      
+      // Generate special cells
+      if (GAME.settings.specialCellsEnabled) {
+        const numSpecial = Math.floor(size * size * 0.2); // 20% special cells
+        GAME.state.specialCells = [];
+        while (GAME.state.specialCells.length < numSpecial) {
+          const cell = Math.floor(Math.random() * size * size);
+          if (!GAME.state.specialCells.includes(cell)) {
+            GAME.state.specialCells.push(cell);
+          }
+        }
+      }
+      
+      document.getElementById('modeSelector').classList.add('hidden');
+      document.getElementById('gameSettings').classList.add('hidden');
+      document.getElementById('gameArea').classList.remove('hidden');
+      
+      updateRoundDisplay();
+      updateStats();
+      updatePowerupButtons();
+      renderBoard();
+      updateTurnIndicator();
+    }
+
+    // RENDER BOARD
+    function renderBoard() {
+      const board = document.getElementById('board');
+      const size = GAME.settings.gridSize;
+      
+      board.className = `board size-${size}`;
+      board.innerHTML = '';
+      
+      for (let i = 0; i < size * size; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.cell = i;
+        
+        if (GAME.state.specialCells.includes(i) && !GAME.state.boardState[i]) {
+          cell.classList.add('special-cell');
+        }
+        
+        if (GAME.state.boardState[i]) {
+          cell.textContent = GAME.state.boardState[i] === 'X' ? '❌' : '⭕';
+          cell.classList.add(`claimed-${GAME.state.boardState[i]}`);
+        }
+        
+        cell.onclick = () => openCellModal(i);
+        board.appendChild(cell);
+      }
+    }
+
+    // GENERATE QUESTION ID
+    function getQuestionId(q) {
+      return `${q.q}_${q.ans}_${q.difficulty || 'easy'}`;
+    }
+
+    // SELECT FRESH QUESTIONS
+    function selectFreshQuestions() {
+      const difficulty = GAME.settings.difficulty;
+      const needed = GAME.settings.questionsPerCell;
+      const allQuestions = [];
+      
+      // Collect questions based on difficulty
+      Object.keys(QUESTION_BANK).forEach(category => {
+        const categoryQuestions = QUESTION_BANK[category][difficulty] || [];
+        categoryQuestions.forEach(q => {
+          allQuestions.push({...q, category, difficulty});
+        });
+      });
+      
+      let available = allQuestions.filter(q => {
+        return !GAME.state.usedQuestionIds.has(getQuestionId(q));
+      });
+      
+      if (available.length < needed) {
+        GAME.state.usedQuestionIds.clear();
+        available = allQuestions;
+      }
+      
+      const shuffled = available.sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, needed);
+      
+      selected.forEach(q => {
+        GAME.state.usedQuestionIds.add(getQuestionId(q));
+      });
+      
+      return selected;
+    }
+
+    // OPEN CELL MODAL
+    function openCellModal(cellIndex) {
+      if (GAME.state.boardState[cellIndex] !== null) {
+        showFeedback('⚠️ This cell is already claimed!', true);
+        return;
+      }
+      
+      GAME.state.activeCell = cellIndex;
+      GAME.state.questionStartTime = Date.now();
+      
+      if (!GAME.state.cellQuestionSets[cellIndex]) {
+        GAME.state.cellQuestionSets[cellIndex] = selectFreshQuestions();
+      }
+      
+      const questions = GAME.state.cellQuestionSets[cellIndex];
+      renderQuestionModal(questions, cellIndex);
+      
+      if (GAME.settings.timerEnabled) {
+        startTimer();
+      }
+    }
+
+    // START TIMER
+    function startTimer() {
+      GAME.state.timeLeft = 30;
+      const container = document.getElementById('timerContainer');
+      const display = document.getElementById('timerDisplay');
+      
+      container.classList.add('show');
+      display.textContent = GAME.state.timeLeft;
+      display.className = 'timer-display';
+      
+      clearInterval(GAME.state.timer);
+      GAME.state.timer = setInterval(() => {
+        GAME.state.timeLeft--;
+        display.textContent = GAME.state.timeLeft;
+        
+        if (GAME.state.timeLeft <= 10) {
+          display.className = 'timer-display warning';
+        }
+        if (GAME.state.timeLeft <= 5) {
+          display.className = 'timer-display danger';
+        }
+        
+        if (GAME.state.timeLeft <= 0) {
+          clearInterval(GAME.state.timer);
+          container.classList.remove('show');
+          showFeedback('⏰ Time\'s up!', true);
+          closeModal();
+          switchTurn();
+        }
+      }, 1000);
+    }
+
+    // STOP TIMER
+    function stopTimer() {
+      clearInterval(GAME.state.timer);
+      document.getElementById('timerContainer').classList.remove('show');
+    }
+
+    // RENDER QUESTION MODAL
+    function renderQuestionModal(questions, cellIndex) {
+      const overlay = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+      
+      const isSpecial = GAME.state.specialCells.includes(cellIndex);
+      
+      let html = `
+        <div class="modal-header">
+          <div class="modal-title">Cell ${cellIndex + 1} - ${GAME.state.currentTurn}'s Turn ${isSpecial ? '⭐ BONUS' : ''}</div>
+        </div>
+        <div class="question-counter">Answer ${GAME.settings.questionsPerCell} questions correctly!</div>
+      `;
+      
+      questions.forEach((q, idx) => {
+        html += `
+          <div class="question-card" data-q-index="${idx}">
+            <div class="question-difficulty ${q.difficulty}">${q.difficulty.toUpperCase()}</div>
+            <div class="question-text">${idx + 1}. ${q.q}</div>
+            <div class="options-grid" id="options-${idx}">
+              ${q.opts.map((opt, optIdx) => `
+                <button 
+                  class="option-btn" 
+                  onclick="selectAnswer(${idx}, ${optIdx})"
+                  id="opt-${idx}-${optIdx}"
+                >
+                  ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div class="feedback" id="feedback-${idx}"></div>
+          </div>
+        `;
+      });
+      
+      html += `
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="submitAnswers()">Submit All</button>
+        </div>
+      `;
+      
+      content.innerHTML = html;
+      overlay.classList.add('show');
+    }
+
+    // SELECT ANSWER
+    function selectAnswer(qIndex, optIndex) {
+      GAME.selectedAnswers[qIndex] = optIndex;
+      
+      const card = document.querySelector(`[data-q-index="${qIndex}"]`);
+      const buttons = card.querySelectorAll('.option-btn');
+      
+      buttons.forEach((btn, idx) => {
+        btn.classList.remove('selected');
+        if (idx === optIndex) {
+          btn.classList.add('selected');
+        }
+      });
+    }
+
+    // USE POWERUP
+    function usePowerup(type) {
+      const currentPlayer = GAME.state.stats[GAME.state.currentTurn];
+      
+      if (type === '5050') {
+        if (currentPlayer.powerups.fiftyfifty <= 0) {
+          showFeedback('❌ No 50/50 power-ups left!', true);
+          return;
+        }
+        
+        currentPlayer.powerups.fiftyfifty--;
+        GAME.state.activePowerup = '5050';
+        
+        // Remove 2 wrong answers from all questions
+        const questions = GAME.state.cellQuestionSets[GAME.state.activeCell];
+        questions.forEach((q, idx) => {
+          const correctAns = q.ans;
+          const wrongIndices = q.opts.map((_, i) => i).filter(i => i !== correctAns);
+          const toRemove = wrongIndices.sort(() => Math.random() - 0.5).slice(0, 2);
+          
+          toRemove.forEach(optIdx => {
+            const btn = document.getElementById(`opt-${idx}-${optIdx}`);
+            if (btn) {
+              btn.disabled = true;
+              btn.style.opacity = '0.3';
+            }
+          });
+        });
+        
+        showFeedback('💡 50/50 activated! 2 wrong answers removed!', false);
+        updatePowerupButtons();
+      }
+      
+      if (type === 'skip') {
+        if (currentPlayer.powerups.skip <= 0) {
+          showFeedback('❌ No Skip power-ups left!', true);
+          return;
+        }
+        
+        currentPlayer.powerups.skip--;
+        showFeedback('⏭️ Question skipped!', false);
+        closeModal();
+        updatePowerupButtons();
+      }
+    }
+
+    // UPDATE POWERUP BUTTONS
+    function updatePowerupButtons() {
+      const currentPlayer = GAME.state.stats[GAME.state.currentTurn];
+      
+      const btn5050 = document.getElementById('btn5050');
+      const btnSkip = document.getElementById('btnSkip');
+      
+      btn5050.textContent = `💡 50/50 (${currentPlayer.powerups.fiftyfifty})`;
+      btn5050.disabled = currentPlayer.powerups.fiftyfifty <= 0;
+      
+      btnSkip.textContent = `⏭️ Skip (${currentPlayer.powerups.skip})`;
+      btnSkip.disabled = currentPlayer.powerups.skip <= 0;
+      
+      // Update powerup display
+      const powerupDisplay = document.getElementById(`powerups${GAME.state.currentTurn}`);
+      powerupDisplay.innerHTML = `
+        <div class="powerup-item ${currentPlayer.powerups.fiftyfifty > 0 ? 'active' : ''}">
+          💡 ×${currentPlayer.powerups.fiftyfifty}
+        </div>
+        <div class="powerup-item ${currentPlayer.powerups.skip > 0 ? 'active' : ''}">
+          ⏭️ ×${currentPlayer.powerups.skip}
+        </div>
+      `;
+    }
+
+    // SUBMIT ANSWERS
+    function submitAnswers() {
+      stopTimer();
+      
+      const cellIndex = GAME.state.activeCell;
+      const questions = GAME.state.cellQuestionSets[cellIndex];
+      const isSpecial = GAME.state.specialCells.includes(cellIndex);
+      
+      let correctCount = 0;
+      let allCorrect = true;
+      
+      questions.forEach((q, idx) => {
+        const selected = GAME.selectedAnswers[idx];
+        const correct = q.ans;
+        const feedback = document.getElementById(`feedback-${idx}`);
+        const card = document.querySelector(`[data-q-index="${idx}"]`);
+        const buttons = card.querySelectorAll('.option-btn');
+        
+        buttons.forEach(btn => btn.disabled = true);
+        
+        GAME.state.totalQuestionsAnswered++;
+        GAME.profile.totalQuestions++;
+        
+        if (selected === correct) {
+          correctCount++;
+          feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback correct';
+          buttons[selected].classList.add('correct');
+          
+          GAME.state.stats[GAME.state.currentTurn].streak++;
+          GAME.profile.totalCorrect++;
+        } else {
+          allCorrect = false;
+          feedback.innerHTML = `❌ Wrong! Answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback wrong';
+          if (selected !== undefined) {
+            buttons[selected].classList.add('wrong');
+          }
+          buttons[correct].classList.add('correct');
+          
+          GAME.state.stats[GAME.state.currentTurn].streak = 0;
+        }
+      });
+      
+      // Award XP
+      const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
+      const baseXP = correctCount * 10;
+      const bonusXP = isSpecial ? baseXP : 0;
+      const totalXP = baseXP + timeBonus + bonusXP;
+      
+      awardXP(totalXP, 'questions');
+      
+      GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
+      
+      // Check for perfectionist achievement
+      if (allCorrect && questions.length >= 5) {
+        unlockAchievement('perfectionist');
+      }
+      
+      // Check for speed demon
+      const timeElapsed = (Date.now() - GAME.state.questionStartTime) / 1000;
+      if (timeElapsed < 60 && questions.length >= 5 && allCorrect) {
+        unlockAchievement('speed_demon');
+      }
+      
+      checkAchievements();
+      
+      if (correctCount === GAME.settings.questionsPerCell) {
+        setTimeout(() => {
+          claimCell(cellIndex, isSpecial);
+          closeModal();
+          checkRoundEnd();
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          showFeedback(`❌ ${correctCount}/${GAME.settings.questionsPerCell} correct!`, true);
+          switchTurn();
+          closeModal();
+        }, 3500);
+      }
+      
+      Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
+      updateStats();
+      updatePowerupButtons();
+    }
+
+    // CLAIM CELL
+    function claimCell(cellIndex, isSpecial) {
+      GAME.state.boardState[cellIndex] = GAME.state.currentTurn;
+      GAME.state.stats[GAME.state.currentTurn].cellsClaimed++;
+      
+      const cell = document.querySelector(`[data-cell="${cellIndex}"]`);
+      cell.textContent = GAME.state.currentTurn === 'X' ? '❌' : '⭕';
+      cell.classList.add(`claimed-${GAME.state.currentTurn}`);
+      cell.classList.remove('special-cell');
+      
+      if (isSpecial) {
+        showFeedback(`🎉 ${GAME.state.currentTurn} claimed BONUS cell! +1 Power-up!`, false);
+        const powerup = Math.random() > 0.5 ? 'fiftyfifty' : 'skip';
+        GAME.state.stats[GAME.state.currentTurn].powerups[powerup]++;
+      } else {
+        showFeedback(`🎉 ${GAME.state.currentTurn} claimed cell!`, false);
+      }
+      
+      updateStats();
+      updatePowerupButtons();
+      switchTurn();
+    }
+
+    // SWITCH TURN
+    function switchTurn() {
+      GAME.state.currentTurn = GAME.state.currentTurn === 'X' ? 'O' : 'X';
+      updateTurnIndicator();
+      updatePowerupButtons();
+    }
+
+    // UPDATE TURN INDICATOR
+    function updateTurnIndicator() {
+      document.getElementById('panelX').classList.toggle('active', GAME.state.currentTurn === 'X');
+      document.getElementById('panelO').classList.toggle('active', GAME.state.currentTurn === 'O');
+    }
+
+    // CHECK ROUND END
+    function checkRoundEnd() {
+      const size = GAME.settings.gridSize;
+      const b = GAME.state.boardState;
+      
+      const patterns = [];
+      
+      // Rows
+      for (let row = 0; row < size; row++) {
+        const pattern = [];
+        for (let col = 0; col < size; col++) {
+          pattern.push(row * size + col);
+        }
+        patterns.push(pattern);
+      }
+      
+      // Columns
+      for (let col = 0; col < size; col++) {
+        const pattern = [];
+        for (let row = 0; row < size; row++) {
+          pattern.push(row * size + col);
+        }
+        patterns.push(pattern);
+      }
+      
+      // Diagonals
+      const diag1 = [];
+      const diag2 = [];
+      for (let i = 0; i < size; i++) {
+        diag1.push(i * size + i);
+        diag2.push(i * size + (size - 1 - i));
+      }
+      patterns.push(diag1, diag2);
+      
+      // Check for winner
+      for (let pattern of patterns) {
+        const values = pattern.map(i => b[i]);
+        if (values[0] && values.every(v => v === values[0])) {
+          handleRoundWin(values[0]);
+          return;
+        }
+      }
+      
+      // Check for draw
+      if (b.every(cell => cell !== null)) {
+        handleRoundDraw();
+      }
+    }
+
+    // HANDLE ROUND WIN
+    function handleRoundWin(winner) {
+      GAME.state.stats[winner].roundsWon++;
+      updateStats();
+      
+      // Check comeback achievement
+      const loser = winner === 'X' ? 'O' : 'X';
+      if (GAME.state.stats[loser].cellsClaimed > GAME.state.stats[winner].cellsClaimed) {
+        unlockAchievement('comeback_king');
+      }
+      
+      awardXP(100, 'round_win');
+      
+      setTimeout(() => {
+        showFeedback(`🏆 ${winner} wins Round ${GAME.state.currentRound}!`, false);
+        
+        if (GAME.state.currentRound < GAME.settings.totalRounds) {
+          document.getElementById('nextRoundBtn').style.display = 'inline-block';
+        } else {
+          checkMatchWinner();
+        }
+      }, 1000);
+    }
+
+    // HANDLE ROUND DRAW
+    function handleRoundDraw() {
+      setTimeout(() => {
+        showFeedback(`🤝 Round ${GAME.state.currentRound} is a draw!`, false);
+        
+        if (GAME.state.currentRound < GAME.settings.totalRounds) {
+          document.getElementById('nextRoundBtn').style.display = 'inline-block';
+        } else {
+          checkMatchWinner();
+        }
+      }, 1000);
+    }
+
+    // NEXT ROUND
+    function nextRound() {
+      GAME.state.currentRound++;
+      const size = GAME.settings.gridSize;
+      GAME.state.boardState = Array(size * size).fill(null);
+      GAME.state.cellQuestionSets = {};
+      GAME.state.currentTurn = 'X';
+      
+      // Regenerate special cells
+      if (GAME.settings.specialCellsEnabled) {
+        const numSpecial = Math.floor(size * size * 0.2);
+        GAME.state.specialCells = [];
+        while (GAME.state.specialCells.length < numSpecial) {
+          const cell = Math.floor(Math.random() * size * size);
+          if (!GAME.state.specialCells.includes(cell)) {
+            GAME.state.specialCells.push(cell);
+          }
+        }
+      }
+      
+      document.getElementById('nextRoundBtn').style.display = 'none';
+      
+      updateRoundDisplay();
+      renderBoard();
+      updateTurnIndicator();
+      updatePowerupButtons();
+    }
+
+    // CHECK MATCH WINNER
+    function checkMatchWinner() {
+      const xWins = GAME.state.stats.X.roundsWon;
+      const oWins = GAME.state.stats.O.roundsWon;
+      
+      setTimeout(() => {
+        if (xWins > oWins) {
+          showFeedback('🎊 PLAYER X WINS THE MATCH! 🎊', false);
+          awardXP(200, 'match_win');
+        } else if (oWins > xWins) {
+          showFeedback('🎊 PLAYER O WINS THE MATCH! 🎊', false);
+          awardXP(200, 'match_win');
+        } else {
+          showFeedback('🤝 MATCH ENDS IN A DRAW! 🤝', false);
+          awardXP(100, 'match_draw');
+        }
+        
+        setTimeout(() => {
+          const playAgain = confirm('Game Over! Play again?');
+          if (playAgain) {
+            backToMenu();
+          }
+        }, 3000);
+      }, 2000);
+    }
+
+    // UPDATE ROUND DISPLAY
+    function updateRoundDisplay() {
+      document.getElementById('roundText').textContent = 
+        `Round ${GAME.state.currentRound} of ${GAME.settings.totalRounds}`;
+      
+      const progress = (GAME.state.currentRound / GAME.settings.totalRounds) * 100;
+      document.getElementById('roundProgressBar').style.width = `${progress}%`;
+    }
+
+    // UPDATE STATS
+    function updateStats() {
+      document.getElementById('winsX').textContent = GAME.state.stats.X.roundsWon;
+      document.getElementById('cellsX').textContent = GAME.state.stats.X.cellsClaimed;
+      document.getElementById('correctX').textContent = GAME.state.stats.X.correctAnswers;
+      
+      document.getElementById('winsO').textContent = GAME.state.stats.O.roundsWon;
+      document.getElementById('cellsO').textContent = GAME.state.stats.O.cellsClaimed;
+      document.getElementById('correctO').textContent = GAME.state.stats.O.correctAnswers;
+    }
+
+    // FORFEIT GAME
+    function forfeitGame() {
+      if (confirm('Forfeit this round? The opponent wins this round.')) {
+        const opponent = GAME.state.currentTurn === 'X' ? 'O' : 'X';
+        GAME.state.stats[opponent].roundsWon++;
+        updateStats();
+        
+        showFeedback(`${opponent} wins Round ${GAME.state.currentRound} by forfeit!`, true);
+        
+        setTimeout(() => {
+          if (GAME.state.currentRound < GAME.settings.totalRounds) {
+            if (confirm('Continue to next round?')) {
+              nextRound();
+            } else {
+              backToMenu();
+            }
+          } else {
+            checkMatchWinner();
+          }
+        }, 2000);
+      }
+    }
+
+    // BACK TO MENU
+    function backToMenu() {
+      if (confirm('Return to main menu? All progress will be lost.')) {
+        resetGame();
+        stopTimer();
+        document.getElementById('gameArea').classList.add('hidden');
+        document.getElementById('gameSettings').classList.add('hidden');
+        document.getElementById('modeSelector').classList.remove('hidden');
+        document.getElementById('nextRoundBtn').style.display = 'none';
+      }
+    }
+    
+    // RESET GAME STATE
+    function resetGame() {
+      const size = GAME.settings.gridSize;
+      GAME.state.boardState = Array(size * size).fill(null);
+      GAME.state.currentRound = 1;
+      GAME.state.currentTurn = 'X';
+      GAME.state.cellQuestionSets = {};
+      GAME.state.usedQuestionIds.clear();
+      GAME.state.specialCells = [];
+      GAME.state.stats = {
+        X: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} },
+        O: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0, powerups: {fiftyfifty: 2, skip: 2} }
+      };
+      GAME.selectedAnswers = {};
+    }
+
+    // CLOSE MODAL
+    function closeModal() {
+      stopTimer();
+      document.getElementById('modalOverlay').classList.remove('show');
+      GAME.state.activeCell = null;
+      GAME.state.activePowerup = null;
+    }
+
+    // SHOW FEEDBACK
+    function showFeedback(msg, isError) {
+      const fb = document.getElementById('globalFeedback');
+      fb.textContent = msg;
+      fb.className = isError ? 'feedback-global error show' : 'feedback-global success show';
+      
+      setTimeout(() => {
+        fb.classList.remove('show');
+      }, 3000);
+    }
+
+    // KEYBOARD SHORTCUTS
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // INITIALIZE ON LOAD
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProgress();
+      console.log('✅ INTUITY Ultimate Grammar Battle loaded!');
+    });
+  </script>
+</body>
+</html>
